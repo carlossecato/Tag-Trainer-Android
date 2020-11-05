@@ -4,23 +4,22 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.CheckoutActivity">
+    tools:context=".activity.CheckoutActivity">
 
     <TextView
         android:layout_margin="18dp"
         android:id="@+id/activity_checkout_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checkout"
-        android:textSize="32dp"
+        android:text="@string/checkout"
         android:textAlignment="center"
-        />
+        android:textSize="32sp" />
 
     <TextView
         android:id="@+id/activity_checkout_total_value_tv"
-        android:textSize="20dp"
+        android:text="@string/price"
         android:layout_margin="16dp"
-        android:text="Price: "
+        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -31,10 +30,9 @@
         android:id="@+id/activity_checkout_payment_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Payment Method"
-        android:textSize="28dp"
-        android:textAlignment="center"
-        />
+        android:text="@string/payment_method"
+        android:textSize="28sp"
+        android:textAlignment="center" />
 
 
     <RadioGroup
@@ -51,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="4dp"
-            android:text="Cartao" />
+            android:text="@string/cartao" />
 
         <RadioButton
             android:id="@+id/activity_checkout_rb_boleto"
@@ -59,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="4dp"
-            android:text="Boleto" />
+            android:text="@string/boleto" />
     </RadioGroup>
 
     <Button
@@ -67,6 +65,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Payment Confirm" />
+        android:text="@string/payment_confirm" />
 
 </LinearLayout>

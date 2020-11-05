@@ -1,5 +1,7 @@
 package com.example.tagandroid.model;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -22,16 +24,18 @@ public class CartProduct implements Serializable {
         return this.quantity;
     }
 
-    public Product getProduct(){
+    public Product getProduct() {
         return p;
     }
 
-    public double getTotalPrice(){
+    public double getTotalPrice() {
         return this.p.getPrice() * quantity;
     }
+
+    @SuppressLint("DefaultLocale")
     @NonNull
     @Override
     public String toString() {
-        return  p.getName() + " - Price: R$" + p.getPrice() + " - Quantity: " + this.quantity + " - Total Price: R$" + String.format("%.2f", p.getPrice() * quantity);
+        return p.getName() + " - Price: R$" + p.getPrice() + " - Quantity: " + this.quantity + " - Total Price: R$" + String.format("%.2f", getTotalPrice());
     }
 }
