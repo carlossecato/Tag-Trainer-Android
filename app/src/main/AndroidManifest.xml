@@ -23,7 +23,21 @@
             android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
             android:value="true" />
 
-        <activity android:name=".activity.CartActivity" />
+        <activity android:name=".activity.CartActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="tagtrainer.com"
+                    android:scheme="http" />
+                <data
+                    android:host="tagtrainer.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.PurchaseActivity" />
         <activity android:name=".activity.CheckoutActivity" />
         <activity android:name=".activity.ProductsActivity" />

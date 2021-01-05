@@ -14,26 +14,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tagandroid.R;
-import com.example.tagandroid.analytics.AnalyticsEvents;
 import com.example.tagandroid.model.Cart;
 import com.example.tagandroid.model.CartProduct;
 
-import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
     private ArrayAdapter<CartProduct> adapter;
     private Cart cart = Cart.getInstance();
-    private AnalyticsEvents analyticsEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        analyticsEvents = AnalyticsEvents.getAnalyticsEventsInstance();
         setContentView(R.layout.activity_cart);
         setTitle("Cart");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setProductsListViewConfig();
         setCheckoutButtonConfig();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
 
@@ -41,14 +43,9 @@ public class CartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         refreshProductsList();
-        sendViewCartEventToFirebase();
     }
 
 
-    private void sendViewCartEventToFirebase() {
-        ArrayList<CartProduct> cartProducts = cart.getCartProductsList();
-        analyticsEvents.viewCart(cartProducts, this);
-    }
 
     private void setCheckoutButtonConfig() {
         Button bnt = findViewById(R.id.activity_cart_goToCheckout_button);
@@ -93,14 +90,12 @@ public class CartActivity extends AppCompatActivity {
         CartProduct clickedProduct = adapter.getItem(menuInfo.position);
 
         if(itemId == R.id.activity_cart_products_lv_menu_add){
-            sendAddToCartEventToFirebase(clickedProduct);
 
             cart.addToCart(clickedProduct.getProduct());
 
             refreshProductsList();
         }
         else {
-            sendRemoveFromCartEventToFirebase(clickedProduct);
 
             cart.removeFromCart(clickedProduct);
 
@@ -110,14 +105,7 @@ public class CartActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    private void sendRemoveFromCartEventToFirebase(CartProduct product) {
-        analyticsEvents.removeFromCart(product, this);
-    }
 
-
-    private void sendAddToCartEventToFirebase(CartProduct product) {
-        analyticsEvents.addToCart(product, this);
-    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

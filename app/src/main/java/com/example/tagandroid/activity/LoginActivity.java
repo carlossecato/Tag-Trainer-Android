@@ -12,9 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tagandroid.R;
-import com.example.tagandroid.analytics.AnalyticsEvents;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,12 +25,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
-    private AnalyticsEvents analyticsEvents;
-    private Tracker analyticsTracker;
 
 
     @Override
@@ -42,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle("Sign in");
         auth = FirebaseAuth.getInstance();
-        analyticsEvents = AnalyticsEvents.getAnalyticsEventsInstance();
         setLoginButtonConfig();
         setGoogleSignInConfig();
     }
@@ -50,32 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        analyticsTracker = analyticsEvents.getDefaultTracker(this);
-        sendScreenViewToAnalytics();
-        sendVisitEventToAnalytics();
     }
-
-    private void sendVisitEventToAnalytics() {
-        analyticsTracker.setScreenName("Login Screen");
-        analyticsTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("User")
-                .setAction("Visit")
-                .setCustomDimension(1, "false")
-                .setCustomDimension(2, null)
-                .build());
-    }
-
-    private void sendScreenViewToAnalytics() {
-        analyticsTracker.setScreenName("Login Screen");
-        HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder();
-
-        builder
-                .setCustomDimension(1, "false")
-                .setCustomDimension(2, null);
-
-        analyticsTracker.send(builder.build());
-    }
-
 
     private void setLoginButtonConfig() {
         Button loginButton = findViewById(R.id.activity_login_signin_button);
@@ -84,23 +52,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                analyticsEvents.login("App Login", context);
-                analyticsEvents.getFirebaseAnalytics().setUserId("123abc456def");
-                sendLoginEventToAnalytics("App Login");
                 openProductsActivity();
                 Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void sendLoginEventToAnalytics(String method) {
-        analyticsTracker.setScreenName("Login Screen");
-        analyticsTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("User")
-                .setAction("Login")
-                .setLabel(method)
-                .build());
-    }
 
     private void setGoogleSignInConfig() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -155,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            analyticsEvents.login("Google Login", context);
                             openProductsActivity();
 
                         } else {

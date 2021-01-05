@@ -11,26 +11,21 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tagandroid.R;
-import com.example.tagandroid.analytics.AnalyticsEvents;
 import com.example.tagandroid.model.Cart;
 import com.example.tagandroid.model.CartProduct;
 
-import java.util.ArrayList;
 
 public class PurchaseActivity extends AppCompatActivity {
     private Cart cart = Cart.getInstance();
-    private AnalyticsEvents analyticsEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase);
         setTitle("Purchase");
-        analyticsEvents = AnalyticsEvents.getAnalyticsEventsInstance();
         setProductsListViewConfig();
         setTotalPriceTextViewConfgi();
         setHomeButtonConfig();
-        sendPurchaseEventToFirebase();
     }
 
     private void setHomeButtonConfig() {
@@ -47,11 +42,6 @@ public class PurchaseActivity extends AppCompatActivity {
 
     }
 
-    private void sendPurchaseEventToFirebase() {
-        ArrayList<CartProduct> items = cart.getCartProductsList();
-
-        analyticsEvents.purchase(items, this);
-    }
 
     private void setProductsListViewConfig() {
         ListView lv = findViewById(R.id.activity_purchase_products_lv);

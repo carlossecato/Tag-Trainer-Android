@@ -12,13 +12,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tagandroid.R;
-import com.example.tagandroid.analytics.AnalyticsEvents;
 import com.example.tagandroid.model.Cart;
 import com.example.tagandroid.model.CartProduct;
 import com.example.tagandroid.model.Product;
 import com.example.tagandroid.utils.ProductsGenerator;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,53 +23,25 @@ import java.util.List;
 public class ProductsActivity extends AppCompatActivity {
     private Cart cart = Cart.getInstance();
     private ArrayAdapter<Product> adapter;
-    private AnalyticsEvents analyticsEvents;
-    private Tracker analyticsTracker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
         setTitle("Products");
-        analyticsEvents = AnalyticsEvents.getAnalyticsEventsInstance();
         productListConfig();
         goToCartButtonConfig();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        analyticsTracker = analyticsEvents.getDefaultTracker(this);
         sendProductImpressionsEventToFirebase();
-        sendProductImpressionsToAnalytics();
     }
 
-    private void sendProductImpressionsToAnalytics() {
-        analyticsTracker.setScreenName("Home Products Screen");
-        HitBuilders.ScreenViewBuilder builder = new HitBuilders.ScreenViewBuilder();
 
-        for (int i = 0; i < adapter.getCount(); i++) {
-            Product adapterProduct = adapter.getItem(i);
-            adapterProduct.setPosition(i);
-
-            builder.addImpression(new com.google.android.gms.analytics.ecommerce.Product()
-                    .setName(adapterProduct.getName())
-                    .setId(adapterProduct.getId())
-                    .setPrice(adapterProduct.getPrice())
-                    //.setBrand(adapterAppProduct.getBrand())
-                    .setCategory(adapterProduct.getCategory())
-                    .setVariant(adapterProduct.getVariant())
-                    .setPosition(i), "Home Products");
-
-        }
-
-        builder
-                .setCustomDimension(1, "true")
-                .setCustomDimension(2, "123abc456def");
-
-        analyticsTracker.send(builder.build());
-
-    }
 
     private void goToCartButtonConfig() {
         Button goToCart = findViewById(R.id.activity_products_goToCart_button);
@@ -109,7 +78,6 @@ public class ProductsActivity extends AppCompatActivity {
     private void sendAddToCartEventToFirebase(Product clickedProduct) {
         CartProduct cartProduct = new CartProduct(clickedProduct);
 
-        analyticsEvents.addToCart(cartProduct, this);
     }
 
 
@@ -121,7 +89,6 @@ public class ProductsActivity extends AppCompatActivity {
             products.add(product);
         }
 
-        analyticsEvents.productImpressions(products, this);
     }
 
     private void setProductListAdapterConfig(ListView listView) {
